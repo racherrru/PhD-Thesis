@@ -1,4 +1,4 @@
-# PhDThesis
+# PhD Thesis
 
 Published in this repository are the codes which have been used in my PhD thesis, titled "Effect of air pollution on skin pigmentation".
 
@@ -9,5 +9,7 @@ Adaikalavan Ramasamy, GIS
 Gokce Oguz, GIS
 
 Mattheus Foo, ASRL
+
+Nikolaos Pantelireis, ASRL
 
 Ang Teng Huat, Autodesk
