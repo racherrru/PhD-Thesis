@@ -15,47 +15,47 @@ for (i = 0; i < filelist.length; i++) {
         // Max Intensity projection
         run("Z Project...", "projection=[Max Intensity]");
         run("Duplicate...", "title=max duplicate");
-replacedFileName = replace(filelist[i], " ", "_");
+        replacedFileName = replace(filelist[i], " ", "_");
 
-c1Name = replacedFileName + "-C1";
-c2Name = replacedFileName + "-C2";
-c3Name = replacedFileName + "-C3";
+        c1 = replacedFileName + "-C1";
+        c2 = replacedFileName + "-C2";
+        c3 = replacedFileName + "-C3";
         
         selectImage("max");
-        run("Duplicate...", "title="+ c1Name +" duplicate channels=1"); // DAPI
+        run("Duplicate...", "title="+ c1 +" duplicate channels=1"); // DAPI
         selectImage("max");
-        run("Duplicate...", "title="+ c2Name +" duplicate channels=2"); // K14    
+        run("Duplicate...", "title="+ c2 +" duplicate channels=2"); // K14    
         selectImage("max");
-        run("Duplicate...", "title="+ c3Name +" duplicate channels=3"); // Melanosomes
+        run("Duplicate...", "title="+ c3 +" duplicate channels=3"); // Melanosomes
 
-        // Count all cells present (usually the first channel)
-        selectWindow(c1Name); // Nuclei (C1)
+        // Count all cells present
+        selectWindow(c1); // Nuclei (C1)
         run("Threshold");
         setAutoThreshold("Default dark no-reset"); // Adjust thresholds as needed
         run("Analyze Particles...", "size=20-Infinity show=Overlay include summarize");
         Table.save(path + "Summary.csv", "Summary")
 
         // Create binary masks for C2 and C3 to find common cells
-        selectWindow(c2Name);
+        selectWindow(c2);
         run("Convert to Mask"); // Convert C2 to binary mask
         run("Duplicate...", "title=C2_mask");
         
-        selectWindow(c3Name);
+        selectWindow(c3);
         run("Convert to Mask"); // Convert C3 to binary mask
         run("Duplicate...", "title=C3_mask");
 
-imageCalculator("AND create", "C2_mask","C3_mask");
-
-rename(replacedFileName + "C3-C2-Common");
-selectImage(replacedFileName + "C3-C2-Common");
-run("Analyze Particles...", "clear include summarize");
-Table.save(path + "Summary.csv", "Summary")
-
-imageCalculator("Subtract create", "C3_mask","C2_mask");
-rename(replacedFileName + "C3-C2-Subtract");
-selectImage(replacedFileName + "C3-C2-Subtract");
-run("Analyze Particles...", "clear include summarize");
+        imageCalculator("AND create", "C2_mask","C3_mask");
+        
+        rename(replacedFileName + "C3-C2-Common");
+        selectImage(replacedFileName + "C3-C2-Common");
+        run("Analyze Particles...", "clear include summarize");
         Table.save(path + "Summary.csv", "Summary")
+        
+        imageCalculator("Subtract create", "C3_mask","C2_mask");
+        rename(replacedFileName + "C3-C2-Subtract");
+        selectImage(replacedFileName + "C3-C2-Subtract");
+        run("Analyze Particles...", "clear include summarize");
+                Table.save(path + "Summary.csv", "Summary")
         
        close("*");	
     }
